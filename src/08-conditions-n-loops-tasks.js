@@ -50,13 +50,12 @@ function getFizzBuzz(num) {
  *   10 => 3628800
  */
 function getFactorial(n) {
-  let result = 1;
-  let m = n;
-  while (m) {
-    m -= 1;
-    result *= m;
+  if (n < 0) {
+    return -1;
+  } if (n === 0) {
+    return 1;
   }
-  return result;
+  return (n * getFactorial(n - 1));
 }
 
 
@@ -420,8 +419,21 @@ function getCommonDirectoryPath(/* pathes */) {
  *                         [ 6 ]]
  *
  */
-function getMatrixProduct(/* m1, m2 */) {
-  throw new Error('Not implemented');
+function getMatrixProduct(m1, m2) {
+  const aNumRows = m1.length;
+  const aNumCols = m1[0].length;
+  const bNumCols = m2[0].length;
+  const m = new Array(aNumRows);
+  for (let r = 0; r < aNumRows; r += 1) {
+    m[r] = new Array(bNumCols);
+    for (let c = 0; c < bNumCols; c += 1) {
+      m[r][c] = 0;
+      for (let i = 0; i < aNumCols; i += 1) {
+        m[r][c] += m1[r][i] * m2[i][c];
+      }
+    }
+  }
+  return m;
 }
 
 
