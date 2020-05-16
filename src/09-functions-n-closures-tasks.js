@@ -63,15 +63,12 @@ function getPowerFunction(exponent) {
  *   getPolynom()      => null
  */
 function getPolynom() {
-  return (x) => {
-    if (arguments.length === 0) {
-      return null;
-    }
-    let result = 0;
-    for (let i = 0; i < arguments.length; i += 1) {
-      result += [...i] * x ** arguments.length - i - 1;
-    }
-    return result;
+  // eslint-disable-next-line prefer-rest-params
+  const args = Array.from(arguments);
+  const len = args.length - 1;
+  // eslint-disable-next-line func-names
+  return function (x) {
+    return args.reduceRight((prev, curr, i) => prev + curr * x ** len - i, null);
   };
 }
 
@@ -162,8 +159,17 @@ function logger(func, logFunc) {
  *   partialUsingArguments(fn, 'a','b','c')('d') => 'abcd'
  *   partialUsingArguments(fn, 'a','b','c','d')() => 'abcd'
  */
-function partialUsingArguments(/* fn, ...args1 */) {
-  throw new Error('Not implemented');
+function partialUsingArguments(fn) {
+  // eslint-disable-next-line prefer-rest-params
+  let args = Array.from(arguments);
+  args.shift();
+  // eslint-disable-next-line func-names
+  return function () {
+    // eslint-disable-next-line prefer-rest-params
+    args = args.concat(Array.from(arguments));
+    // eslint-disable-next-line prefer-spread
+    return fn.apply(null, args);
+  };
 }
 
 
@@ -184,8 +190,19 @@ function partialUsingArguments(/* fn, ...args1 */) {
  *   getId4() => 7
  *   getId10() => 11
  */
-function getIdGeneratorFunction(/* startFrom */) {
-  throw new Error('Not implemented');
+function getIdGeneratorFunction(startFrom) {
+  let id = startFrom;
+  function* getID() {
+    while (true) {
+      yield id;
+      id += 1;
+    }
+  }
+  const gen = getID();
+  // eslint-disable-next-line func-names
+  return function () {
+    return gen.next(id).value;
+  };
 }
 
 
