@@ -410,8 +410,30 @@ function toNaryString(num, n) {
  *   ['/web/assets/style.css', '/.bin/mocha',  '/read.me'] => '/'
  *   ['/web/favicon.ico', '/web-scripts/dump', '/webalizer/logs'] => '/'
  */
-function getCommonDirectoryPath(/* pathes */) {
-  throw new Error('Not implemented');
+function getCommonDirectoryPath(pathes) {
+  let commonPath = '';
+  const parts = new Array(pathes.length);
+  let minLength = Infinity;
+  for (let i = 0; i < pathes.length; i += 1) {
+    parts[i] = pathes[i].split('/');
+    if (parts[i].length < minLength) {
+      minLength = parts[i].length;
+    }
+  }
+  for (let i = 0; i < minLength; i += 1) {
+    const partValue = parts[0][i];
+    let j = 1;
+    for (j = 1; j < parts.length; j += 1) {
+      if (parts[j][i] !== partValue) {
+        break;
+      }
+    }
+    if (j !== parts.length) {
+      break;
+    }
+    commonPath += `${partValue}/`;
+  }
+  return commonPath;
 }
 
 
@@ -481,8 +503,26 @@ function getMatrixProduct(m1, m2) {
  *    [    ,   ,    ]]
  *
  */
-function evaluateTicTacToePosition(/* position */) {
-  throw new Error('Not implemented');
+function evaluateTicTacToePosition(position) {
+  // eslint-disable-next-line max-len
+  if (position[0][0] && (position[0][0] === position[1][1]) && (position[0][0] === position[2][2])) {
+    return position[0][0];
+  }
+  // eslint-disable-next-line max-len
+  if (position[0][2] && (position[0][2] === position[1][1]) && (position[0][2] === position[2][0])) {
+    return position[0][2];
+  }
+  for (let i = 0; i < position.length; i += 1) {
+    // eslint-disable-next-line max-len
+    if (position[i][0] && (position[i][0] === position[i][1]) && (position[i][0] === position[i][2])) {
+      return position[i][0];
+    }
+    // eslint-disable-next-line max-len
+    if (position[0][i] && (position[0][i] === position[1][i]) && (position[0][i] === position[2][i])) {
+      return position[0][i];
+    }
+  }
+  return undefined;
 }
 
 
