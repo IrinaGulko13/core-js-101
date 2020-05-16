@@ -62,13 +62,14 @@ function getPowerFunction(exponent) {
  *   getPolynom(8)     => y = 8
  *   getPolynom()      => null
  */
-function getPolynom() {
-  // eslint-disable-next-line prefer-rest-params
-  const args = Array.from(arguments);
-  const len = args.length - 1;
-  // eslint-disable-next-line func-names
-  return function (x) {
-    return args.reduceRight((prev, curr, i) => prev + curr * x ** len - i, null);
+function getPolynom(...args) {
+  return (x) => {
+    let res = 0;
+    args.map((val, ind) => {
+      res += val * x ** (args.length - ind - 1);
+      return null;
+    });
+    return res;
   };
 }
 
@@ -108,8 +109,15 @@ function memoize(func) {
  * }, 2);
  * retryer() => 2
  */
-function retry(/* func, attempts */) {
-  throw new Error('Not implemented');
+function retry(func, attempts) {
+  return () => {
+    for (let i = 0; i < attempts;) {
+      try {
+        return func();
+      } catch (err) { i += 1; }
+    }
+    return null;
+  };
 }
 
 
